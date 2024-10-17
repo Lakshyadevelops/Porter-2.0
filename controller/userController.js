@@ -8,7 +8,7 @@ const { generateToken } = require("./authController");
 
 const signup = catchAsync(async (req, res, next) => {
   const body = req.body;
-  if (!["admin", "user"].includes(body.role)) {
+  if (!["ADMIN", "USER"].includes(body.role)) {
     throw new AppError("Invalid role", 400);
   }
   const newUser = await user.create({

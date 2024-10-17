@@ -1,5 +1,6 @@
 require("dotenv").config({ path: `${process.cwd()}/.env` });
 const express = require("express");
+const cors = require("cors");
 
 const userRouter = require("./route/userRoute");
 const driverRouter = require("./route/driverRoute");
@@ -12,13 +13,14 @@ const sequelize = require("./config/database");
 const app = express();
 
 app.use(express.json());
+app.use(cors()); // Enable All CORS Requests only in development
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/driver", driverRouter);
 app.use("/api/v1/booking", bookingRouter);
 
 
 const init = catchAsync(async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync({ alter: true });
   console.log("All models were synchronized successfully.");
 });
 init();

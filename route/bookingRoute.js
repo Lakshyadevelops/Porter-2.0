@@ -3,24 +3,33 @@ const {
   restrictTo,
   driverAuthentication,
 } = require("../controller/authController");
+
 const {
-  tryBooking,
-  cancelBooking,
-  acceptBooking,
+  book,
+  cancel,
+  accept,
+  get,
+  statusUpdate,
 } = require("../controller/bookingController");
 
 const bookingRouter = require("express").Router();
 
-bookingRouter
-  .route("/try")
-  .post(userAuthentication, restrictTo("USER"), tryBooking);
+bookingRouter.route("/book").post(userAuthentication, restrictTo("USER"), book);
 
 bookingRouter
   .route("/cancel")
-  .post(userAuthentication, restrictTo("USER"), cancelBooking);
+  .post(userAuthentication, restrictTo("USER"), cancel);
 
 bookingRouter
   .route("/accept")
-  .post(driverAuthentication, restrictTo("DRIVER"), acceptBooking);
+  .post(driverAuthentication, restrictTo("DRIVER"), accept);
+
+bookingRouter
+  .route("/book")
+  .get(driverAuthentication, restrictTo("DRIVER"), get);
+
+bookingRouter
+  .route("/status")
+  .post(driverAuthentication, restrictTo("DRIVER"), statusUpdate);
 
 module.exports = bookingRouter;

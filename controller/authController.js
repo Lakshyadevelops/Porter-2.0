@@ -12,6 +12,7 @@ const generateToken = (payload) => {
 
 const restrictTo = (...roles) => {
   const checkPermission = (req, res, next) => {
+    console.log(req.user);
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError("You do not have permission to perform this action", 403)
@@ -23,7 +24,7 @@ const restrictTo = (...roles) => {
 };
 
 const userAuthentication = catchAsync(async (req, res, next) => {
-  const idtToken = "";
+  let idtToken = "";
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -51,7 +52,7 @@ const userAuthentication = catchAsync(async (req, res, next) => {
 });
 
 const driverAuthentication = catchAsync(async (req, res, next) => {
-  const idtToken = "";
+  let idtToken = "";
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -78,4 +79,9 @@ const driverAuthentication = catchAsync(async (req, res, next) => {
   return next();
 });
 
-module.exports = { restrictTo, userAuthentication, driverAuthentication, generateToken };
+module.exports = {
+  restrictTo,
+  userAuthentication,
+  driverAuthentication,
+  generateToken,
+};
