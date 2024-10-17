@@ -3,6 +3,7 @@ const express = require("express");
 
 const userRouter = require("./route/userRoute");
 const driverRouter = require("./route/driverRoute");
+const bookingRouter = require("./route/bookingRoute");
 const globalErrorHandler = require("./controller/errorController");
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/appError");
@@ -13,6 +14,8 @@ const app = express();
 app.use(express.json());
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/driver", driverRouter);
+app.use("/api/v1/booking", bookingRouter);
+
 
 const init = catchAsync(async () => {
   await sequelize.sync({ force: true });
