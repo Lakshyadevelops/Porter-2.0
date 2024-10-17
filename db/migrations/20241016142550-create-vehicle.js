@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.ENUM("BIKE", "TRUCK"),
       },
-      vehicle_number: {
+      plateNumber: {
         type: Sequelize.STRING,
         allowNull: false,
       },

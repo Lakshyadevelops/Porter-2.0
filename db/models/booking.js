@@ -1,6 +1,7 @@
 const sequelize = require("../../config/database");
 const Sequelize = require("sequelize");
 const DataTypes = Sequelize.DataTypes;
+const payment = require("./payment");
 
 const booking = sequelize.define(
   "booking",
@@ -60,5 +61,20 @@ const booking = sequelize.define(
     modelName: "booking",
   }
 );
+
+payment.belongsTo(booking, {
+  foreignKey: "booking_id",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+booking.hasMany(payment, {
+  foreignKey: "booking_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+// await payment.sync({alter:true});
 
 module.exports = booking;

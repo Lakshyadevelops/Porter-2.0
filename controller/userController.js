@@ -6,7 +6,6 @@ const AppError = require("../utils/appError");
 const redisClient = require("../config/redisClient");
 const { generateToken } = require("./authController");
 
-
 const signup = catchAsync(async (req, res, next) => {
   const body = req.body;
   if (!["admin", "user"].includes(body.role)) {
@@ -68,7 +67,6 @@ const login = catchAsync(async (req, res, next) => {
 
 const tryBooking = catchAsync(async (req, res, next) => {
   redisClient.set("booking", JSON.stringify(req.body));
-
 });
 
-module.exports = { signup, login ,tryBooking};
+module.exports = { signup, login, tryBooking };

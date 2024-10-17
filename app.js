@@ -6,6 +6,7 @@ const driverRouter = require("./route/driverRoute");
 const globalErrorHandler = require("./controller/errorController");
 const catchAsync = require("./utils/catchAsync");
 const AppError = require("./utils/appError");
+const sequelize = require("./config/database");
 
 const app = express();
 
@@ -13,6 +14,11 @@ app.use(express.json());
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/driver", driverRouter);
 
+const init = catchAsync(async () => {
+  await sequelize.sync({ force: true });
+  console.log("All models were synchronized successfully.");
+});
+init();
 
 app.use(
   "*",

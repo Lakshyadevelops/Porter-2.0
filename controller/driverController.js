@@ -4,27 +4,32 @@ const bcrypt = require("bcrypt");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const { generateToken } = require("./authController");
+const driver = require("../db/models/driver");
+const vehicle = require("../db/models/vehicle");
 
 const signup = catchAsync(async (req, res, next) => {
   const body = req.body;
-  if (!["admin", "user"].includes(body.role)) {
-    throw new AppError("Invalid role", 400);
-  }
-  console.log(body);
-  const newUser = await user.create({
+
+  const newDriver = await driver.create({
     name: body.name,
-    role: body.role,
     email: body.email,
     phone: body.phone,
     password: body.password,
     confirmPassword: body.confirmPassword,
+    status: "ACTIVE",
+    vehicle: {
+      type: body.type,
+      capacity: body.capacity,
+      plateNumber: body.plateNumber,
+    },
+    include: [vehicle],
   });
 
-  if (!newUser) {
+  if (!newDriver) {
     return next(new AppError("Failed to create user", 400));
   }
 
-  const result = newUser.toJSON();
+  const result = newDriver.toJSON();
 
   delete result.password;
   delete result.deletedAt;
@@ -45,7 +50,7 @@ const login = catchAsync(async (req, res, next) => {
     return next(new AppError("Email and password are required", 400));
   }
 
-  const result = await user.findOne({
+  const result = await driver.findOne({
     where: {
       email: email,
     },

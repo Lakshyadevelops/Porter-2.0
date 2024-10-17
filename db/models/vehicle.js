@@ -1,4 +1,7 @@
 const sequelize = require("../../config/database");
+const { Sequelize } = require("sequelize");
+const booking = require("./booking");
+const driver = require("./driver");
 
 const vehicle = sequelize.define(
   "vehicle",
@@ -13,7 +16,7 @@ const vehicle = sequelize.define(
       allowNull: false,
       type: Sequelize.ENUM("BIKE", "TRUCK"),
     },
-    vehicle_number: {
+    plateNumber: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
@@ -40,5 +43,34 @@ const vehicle = sequelize.define(
     modelName: "vehicle",
   }
 );
+
+vehicle.hasOne(driver, {
+  foreignKey: "vehicle_id",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+driver.belongsTo(vehicle, {
+  foreignKey: "vehicle_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+vehicle.hasMany(booking, {
+  foreignKey: "vehicle_id",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+booking.belongsTo(vehicle, {
+  foreignKey: "vehicle_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+// await booking.sync({alter:true});
+// await driver.sync({alter:true});
 
 module.exports = vehicle;

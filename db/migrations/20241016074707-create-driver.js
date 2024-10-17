@@ -23,12 +23,7 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
-      vehicle_id: {
-        allowNull: false,
-        unique: true,
-        type: Sequelize.STRING,
-      },
-      active: {
+      status: {
         allowNull: false,
         type: Sequelize.ENUM("ACTIVE", "INACTIVE", "BLOCKED", "HOLD"),
       },

@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 const sequelize = require("../../config/database");
 const bcrypt = require("bcrypt");
 const AppError = require("../../utils/appError");
+const booking = require("./booking");
 
 const user = sequelize.define(
   "user",
@@ -63,18 +64,18 @@ const user = sequelize.define(
     password: {
       type: Sequelize.STRING,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: "password cannot be null",
-        },
-        notEmpty: {
-          msg: "password cannot be empty",
-        },
-        len: {
-          args: [8, 20],
-          msg: "password must be between 6 and 20 characters",
-        },
-      },
+      // validate: {
+      //   notNull: {
+      //     msg: "password cannot be null",
+      //   },
+      //   notEmpty: {
+      //     msg: "password cannot be empty",
+      //   },
+      //   len: {
+      //     args: [8, 20],
+      //     msg: "password must be between 8 and 20 characters",
+      //   },
+      // },
     },
     confirmPassword: {
       type: Sequelize.VIRTUAL,
@@ -106,5 +107,20 @@ const user = sequelize.define(
     modelName: "user",
   }
 );
+
+booking.belongsTo(user, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+user.hasMany(booking, {
+  foreignKey: "user_id",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+// await booking.sync({alter:true});
 
 module.exports = user;
