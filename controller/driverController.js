@@ -10,6 +10,16 @@ const vehicle = require("../db/models/vehicle");
 const signup = catchAsync(async (req, res, next) => {
   const body = req.body;
 
+  const newVehicle = await vehicle.create({
+    type: body.type,
+    capacity: body.capacity,
+    plateNumber: body.plateNumber,
+  });
+
+  if (!newVehicle) {
+    return next(new AppError("Failed to create vehicle", 400));
+  }
+
   const newDriver = await driver.create({
     name: body.name,
     email: body.email,
@@ -17,15 +27,11 @@ const signup = catchAsync(async (req, res, next) => {
     password: body.password,
     confirmPassword: body.confirmPassword,
     status: "ACTIVE",
-    vehicle: {
-      type: body.type,
-      capacity: body.capacity,
-      plateNumber: body.plateNumber,
-    },
-    include: [vehicle],
+    vehicle_id: newVehicle.id,
   });
 
   if (!newDriver) {
+    await newVehicle.destroy();
     return next(new AppError("Failed to create user", 400));
   }
 
@@ -40,7 +46,7 @@ const signup = catchAsync(async (req, res, next) => {
 
   return res.status(201).json({
     status: "success",
-    data: result,
+    // data: result,
   });
 });
 

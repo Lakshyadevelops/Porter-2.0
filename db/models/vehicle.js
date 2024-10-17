@@ -52,7 +52,7 @@ vehicle.hasOne(driver, {
 });
 
 driver.belongsTo(vehicle, {
-  foreignKey: "vehicle_id",
+  foreignKey: "vehicle_id", 
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
